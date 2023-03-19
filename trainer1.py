@@ -51,7 +51,7 @@ lbl3 = tk.Label(window, text="Status : ", width=20, fg="#edf2f4",
                 bg="#ef233c", height=2, font=('times', 15, 'bold'))
 lbl3.place(x=400, y=400)
 
-message = tk.Label(window, text="", bg="#ef233c", fg="#edf2f4", width=30,
+message = tk.Label(window, text="", bg="#ef233c", fg="#edf2f4", width=40,
                    height=2, activebackground="#d90429", font=('times', 15, ' bold '))
 message.place(x=700, y=400)
 
@@ -61,7 +61,7 @@ lbl3.place(x=400, y=650)
 
 
 message2 = tk.Label(window, text="", fg="#edf2f4", bg="#ef233c",
-                    activeforeground="green", width=30, height=5, font=('times', 15, ' bold '))
+                    activeforeground="green", width=40, height=5, font=('times', 15, ' bold '))
 message2.place(x=700, y=650)
 
 
