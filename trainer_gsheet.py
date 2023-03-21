@@ -12,7 +12,45 @@ import time
 import tkinter.ttk as ttk
 import tkinter.font as font
 import os
+
 import gspread
+import json
+
+with open('key.json') as key_:
+    data = json.load(key_)
+key_.close()
+gsheet_id = data['gheet_id']
+gc = gspread.service_account(filename = "./key.json")
+sh = gc.open_by_url("https://docs.google.com/spreadsheets/d/1oxnrpf3CdQLjOGxyQHQXXqPErmA_Zt8Zzdl3XE3xTMc/edit#gid=0")
+att = sh.worksheet("attendance")
+db = sh.worksheet("database")
+gsheet_url_att = "https://docs.google.com/spreadsheets/d/{}/gviz/tq?tqx=out:csv&sheet={}".format(gsheet_id,'attendance')
+gsheet_url_db = "https://docs.google.com/spreadsheets/d/{}/gviz/tq?tqx=out:csv&sheet={}".format(gsheet_id,'database')
+# print(gsheet_url)
+att_df = pd.read_csv(gsheet_url_att)
+# db_df = pd.read_csv(gsheet_url_db)
+# print(att_df.head())
+# print(db_df.head())
+
+sheets = ["att", "db"]
+
+students = 0
+day = 0
+
+# for i in sheets:
+#     i.update("A1", [["Id", "Name"]])
+
+att.update("A1", [["Id", "Name"]])
+db.update("A1", [["Id", "Name"]])
+
+# for i in range(0,3):
+#     att.format((i,1), {'textFormat': {'bold': True}})
+#     db.format((i,1), {'textFormat': {'bold': True}})
+
+att.format("A1", {'textFormat': {'bold': True}})
+att.format("B1", {'textFormat': {'bold': True}})
+db.format("A1", {'textFormat': {'bold': True}})
+db.format("B1", {'textFormat': {'bold': True}})
 
 
 window = tk.Tk()
@@ -128,10 +166,16 @@ def TakeImages():
         cv2.destroyAllWindows()
         res = "Images Saved for ID : " + Id + "   Name : " + name
         row = [Id, name]
-        with open('StudentDetails\StudentDetails.csv', 'a+') as csvFile:
-            writer = csv.writer(csvFile)
-            writer.writerow(row)
-        csvFile.close()
+        # with open('StudentDetails\StudentDetails.csv', 'a+') as csvFile:
+        #     writer = csv.writer(csvFile)
+        #     writer.writerow(row)
+        # csvFile.close()
+
+        #-----------------------------------------------------------------------
+        db.update(f"A{students+2}", [[Id, name]])
+        students += 1
+        #-----------------------------------------------------------------------
+
         message.configure(text=res)
         with open('Attendance\Attendance_Sheet.csv', 'a+') as csvFile:
             writer = csv.writer(csvFile)
@@ -185,7 +229,12 @@ def TrackImages():
     recognizer.read("TrainingImage\Trainner.yml")
     harcascadePath = "haarcascade_frontalface_default.xml"
     faceCascade = cv2.CascadeClassifier(harcascadePath)
-    df = pd.read_csv("StudentDetails\StudentDetails.csv")
+    
+    #------------------------------------------------------------------
+    # df = pd.read_csv("StudentDetails\StudentDetails.csv")
+    df = pd.read_csv(gsheet_url_db)
+    #------------------------------------------------------------------
+
     name_list = []
     cam = cv2.VideoCapture(0)
     font = cv2.FONT_HERSHEY_SIMPLEX
@@ -201,17 +250,22 @@ def TrackImages():
             if (conf < 50):
                 ts = time.time()
                 date = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
-                timeStamp = datetime.datetime.fromtimestamp(
-                    ts).strftime('%H:%M:%S')
+                timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%H:%M:%S')
                 date = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
+
+                #----------------------------------------------------------------------
                 aa = df.loc[df['Id'] == Id]['Name'].values
+                # for i in range(1,students+2):
+                #     if Id == df.get()
+                #     aa = 
+                #----------------------------------------------------------------------
+                
                 string = str(aa[0])
                 name_list.append(string)
                 name_list = list(set(name_list))
                 print(name_list)
 
-                time_date = datetime.datetime.fromtimestamp(
-                    ts).strftime('%Y-%m-%d')
+                time_date = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
                 # frame=pd.read_csv("Attendance\Attendance_Sheet.csv")
                 # frame[date]=0
                 # row_index = df.index[df['Name'] == string].tolist()[0]
@@ -225,7 +279,11 @@ def TrackImages():
                 # frame[datetime.datetime.fromtimestamp(ts).strftime('%m-%d')] =""
 
                 tt = str(Id)+"-"+aa
+
+                #--------------------------------------------------------------
+                att.update()
                 attendance.loc[len(attendance)] = [Id, aa, date, timeStamp]
+                #--------------------------------------------------------------
 
             else:
                 Id = 'Unknown'
