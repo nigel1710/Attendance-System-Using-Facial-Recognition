@@ -173,6 +173,18 @@ def getImagesAndLabels(path):
         Ids.append(Id)
     return faces, Ids
 
+def Defaulters():
+    # Load the attendance data from the CSV file
+    attendance = pd.read_csv('Attendance_Sheet.csv')
+
+    # Calculate the defaulters list
+    threshold = 2
+    attendance['Defaulters'] = attendance.iloc[:,2:].sum(axis=1) < threshold
+    attendance.loc[attendance['Defaulters'], 'Defaulters'] = True
+
+    # Save the attendance report to a new CSV file
+    attendance.to_csv('Attendance_Report.csv', index=False)
+
 
 def TrackImages():
     recognizer = cv2.face.LBPHFaceRecognizer_create()
@@ -277,16 +289,19 @@ clearButton2 = tk.Button(window, text="Clear", command=clear2, fg="#edf2f4", bg=
 clearButton2.place(x=950, y=300)
 takeImg = tk.Button(window, text="Take Images", command=TakeImages, fg="#edf2f4", bg="#3a86ff",
                     width=20, height=3, activebackground="#d90429", font=('times', 15, ' bold '))
-takeImg.place(x=200, y=500)
+takeImg.place(x=50, y=500)
 trainImg = tk.Button(window, text="Train Model", command=TrainImages, fg="#edf2f4", bg="#3a86ff",
                      width=20, height=3, activebackground="#d90429", font=('times', 15, ' bold '))
-trainImg.place(x=500, y=500)
+trainImg.place(x=350, y=500)
 trackImg = tk.Button(window, text="Mark Attendance", command=TrackImages, fg="#edf2f4",
                      bg="#3a86ff", width=20, height=3, activebackground="#d90429", font=('times', 15, ' bold '))
-trackImg.place(x=800, y=500)
+trackImg.place(x=650, y=500)
+Default = tk.Button(window, text="Defaulters", command=Defaulters, fg="#edf2f4",
+                     bg="#3a86ff", width=20, height=3, activebackground="#d90429", font=('times', 15, ' bold '))
+Default.place(x=950, y=500)
 quitWindow = tk.Button(window, text="Quit", command=window.destroy, fg="#edf2f4", bg="#3a86ff",
                        width=20, height=3, activebackground="#d90429", font=('times', 15, ' bold '))
-quitWindow.place(x=1100, y=500)
+quitWindow.place(x=1250, y=500)
 
 
 window.mainloop()
