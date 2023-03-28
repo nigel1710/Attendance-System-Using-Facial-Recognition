@@ -20,6 +20,7 @@ dialog_title = 'QUIT'
 dialog_text = 'Are you sure?'
 
 window.configure(background='#2b2d42')
+window.geometry("1900x1000")
 
 
 window.grid_rowconfigure(0, weight=1)
@@ -143,6 +144,8 @@ def TakeImages():
             res = "Enter Numeric Id"
             message.configure(text=res)
 
+    if os.path.exists("TrainingImage\Trainner.yml"):
+        os.remove("TrainingImage\Trainner.yml")
 
 def TrainImages():
 
