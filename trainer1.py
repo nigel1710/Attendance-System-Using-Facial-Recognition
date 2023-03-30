@@ -178,7 +178,7 @@ def getImagesAndLabels(path):
 
 def Defaulters():
     # Load the attendance data from the CSV file
-    attendance = pd.read_csv('Attendance_Sheet.csv')
+    attendance = pd.read_csv('Attendance\Attendance_Sheet.csv')
 
     # Calculate the defaulters list
     threshold = 2
@@ -186,7 +186,11 @@ def Defaulters():
     attendance.loc[attendance['Defaulters'], 'Defaulters'] = True
 
     # Save the attendance report to a new CSV file
-    attendance.to_csv('Attendance_Report.csv', index=False)
+    attendance.to_csv('Defaulters_List.csv', index=False)
+    res = "Defaulters File Generated"
+    message.configure(text=res)
+
+
 
 
 def TrackImages():
@@ -255,13 +259,15 @@ def TrackImages():
     Hour, Minute, Second = timeStamp.split(":")
     frame = pd.read_csv("Attendance\Attendance_Sheet.csv")
     frame[date] = 0
-    # frame['2023-03-23']=0
+    # frame['2023-04-01']=0
 
     # frame[date]=''
     for row in name_list:
         row_index = df.index[df['Name'] == row].tolist()[0]
         print(row_index)
         frame.loc[row_index, time_date] = 1
+        # frame.loc[row_index,'2023-04-01'] = 1
+
         frame.to_csv("Attendance\Attendance_Sheet.csv", index=False)
 
     # row_index = df.index[df['Name'] == string].tolist()[0]
