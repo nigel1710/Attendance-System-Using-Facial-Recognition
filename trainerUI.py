@@ -13,42 +13,6 @@ import tkinter.ttk as ttk
 import tkinter.font as font
 import os
 
-import gspread
-import json
-
-with open('key.json') as key_:
-    data = json.load(key_)
-key_.close()
-gsheet_id = data['gheet_id']
-gc = gspread.service_account(filename = "./key.json")
-sh = gc.open_by_url("https://docs.google.com/spreadsheets/d/1oxnrpf3CdQLjOGxyQHQXXqPErmA_Zt8Zzdl3XE3xTMc/edit#gid=0")
-att = sh.worksheet("attendance")
-db = sh.worksheet("database")
-dft = sh.worksheet("defaulters")
-gsheet_url_att = "https://docs.google.com/spreadsheets/d/{}/gviz/tq?tqx=out:csv&sheet={}".format(gsheet_id,'attendance')
-gsheet_url_db = "https://docs.google.com/spreadsheets/d/{}/gviz/tq?tqx=out:csv&sheet={}".format(gsheet_id,'database')
-gsheet_url_db = "https://docs.google.com/spreadsheets/d/{}/gviz/tq?tqx=out:csv&sheet={}".format(gsheet_id,'defaulters')
-# print(gsheet_url)
-att_df = pd.read_csv(gsheet_url_att)
-# db_df = pd.read_csv(gsheet_url_db)
-# print(att_df.head())
-# print(db_df.head())
-
-att.update("A1", [["Id", "Name"]])
-db.update("A1", [["Id", "Name"]])
-dft.update("A1", [["Id", "Name"]])
-
-for i in range(0,3):
-    att.format((i,1), {'textFormat': {'bold': True}})
-    db.format((i,1), {'textFormat': {'bold': True}})
-    dft.format((i,1), {'textFormat': {'bold': True}})
-
-# att.format("A1", {'textFormat': {'bold': True}})
-# att.format("B1", {'textFormat': {'bold': True}})
-# db.format("A1", {'textFormat': {'bold': True}})
-# db.format("B1", {'textFormat': {'bold': True}})
-
-
 window = tk.Tk()
 window.title("Face_Recogniser")
 
