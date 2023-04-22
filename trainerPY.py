@@ -192,41 +192,6 @@ def Defaulters():
     res = "Defaulters File Generated"
     message.configure(text=res)
 
-    '''
-    PySimpleGUI
-    # if os.path.exists("Defaulters_List.csv"):
-    if os.path.exists("CollegeScorecardDataDictionary-09-12-2015.csv"):
-        def_layout = [[
-            sg.Table(values = [],
-                     headings = [],
-                     max_col_width=25,
-                     auto_size_columns=True,
-                     justification='center',
-                     num_rows=20,
-                     alternating_row_color='lightblue',
-                     key='-TABLE-')],
-                [
-                    sg.Cancel()
-                ]
-            ]
-        def_window = sg.Window('CSV File Viewer', def_layout)
-
-        with open("CollegeScorecardDataDictionary-09-12-2015.csv", "r") as file:
-            reader = csv.reader(file)
-            def_data = list(reader)
-
-        headings = def_data[0]
-        try:
-            values = def_data[1]
-            def_window["-TABLE-"].update(values = values, headings = headings)
-        except:
-            pass
-
-        while True:
-            event, values = def_window.read()
-            if event in (sg.WIN_CLOSED, "Cancel"):
-                break
-        '''
     root = tk.Tk()
 
     class CSVViewer(tk.Frame):
@@ -237,13 +202,13 @@ def Defaulters():
             self.create_widgets()
 
         def create_widgets(self):
-            with open("CollegeScorecardDataDictionary-09-12-2015.csv", newline = '') as csvfile:
+            with open("Defaulters_List.csv", newline = '') as csvfile:
                 reader = csv.reader(csvfile)
                 for i, row in enumerate(reader):
                     for j, item in enumerate(row):
-                        label = tk.Label(self, text = item, relief = tk.RIDGE, width = 40)
+                        label = tk.Label(self, text = item, relief = tk.RIDGE, width = 20)
                         label.grid(row = i, column = j)
-    app = CSVViewer(root)
+    CSVViewer(root)
 
 
 def TrackImages():
