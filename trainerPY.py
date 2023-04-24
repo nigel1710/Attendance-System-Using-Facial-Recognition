@@ -16,7 +16,7 @@ import os
 import PySimpleGUI as sg
 
 window = tk.Tk()
-window.title("Face_Recogniser")
+window.title("Face Recognition Based Attendance System")
 
 dialog_title = 'QUIT'
 dialog_text = 'Are you sure?'
@@ -192,24 +192,6 @@ def Defaulters():
     res = "Defaulters File Generated"
     message.configure(text=res)
 
-    root = tk.Tk()
-
-    class CSVViewer(tk.Frame):
-        def __init__(self, master = None):
-            super().__init__(master)
-            self.master = master
-            self.grid()
-            self.create_widgets()
-
-        def create_widgets(self):
-            with open("Defaulters_List.csv", newline = '') as csvfile:
-                reader = csv.reader(csvfile)
-                for i, row in enumerate(reader):
-                    for j, item in enumerate(row):
-                        label = tk.Label(self, text = item, relief = tk.RIDGE, width = 20)
-                        label.grid(row = i, column = j)
-    CSVViewer(root)
-
 
 def TrackImages():
     recognizer = cv2.face.LBPHFaceRecognizer_create()
@@ -307,6 +289,45 @@ def TrackImages():
     res = attendance
     message2.configure(text=res)
 
+def display_attendance():
+    root = tk.Tk()
+    root.title("Attendance sheet")
+
+    class CSVViewer(tk.Frame):
+        def __init__(self, master = None):
+            super().__init__(master)
+            self.master = master
+            self.grid()
+            self.create_widgets()
+
+        def create_widgets(self):
+            with open("Attendance\Attendance_Sheet.csv", newline = '') as csvfile:
+                reader = csv.reader(csvfile)
+                for i, row in enumerate(reader):
+                    for j, item in enumerate(row):
+                        label = tk.Label(self, text = item, relief = tk.RIDGE, width = 20)
+                        label.grid(row = i, column = j)
+    CSVViewer(root)
+
+def display_def():
+    root = tk.Tk()
+    root.title("Defaulters List")
+
+    class CSVViewer(tk.Frame):
+        def __init__(self, master = None):
+            super().__init__(master)
+            self.master = master
+            self.grid()
+            self.create_widgets()
+
+        def create_widgets(self):
+            with open("Defaulters_List.csv", newline = '') as csvfile:
+                reader = csv.reader(csvfile)
+                for i, row in enumerate(reader):
+                    for j, item in enumerate(row):
+                        label = tk.Label(self, text = item, relief = tk.RIDGE, width = 20)
+                        label.grid(row = i, column = j)
+    CSVViewer(root)
 
 clearButton = tk.Button(window, text="Clear", command=clear, fg="#edf2f4", bg="#ef233c",
                         width=20, height=2, activebackground="#d90429", font=('times', 15, ' bold '))
@@ -329,6 +350,14 @@ Default.place(x=950, y=500)
 quitWindow = tk.Button(window, text="Quit", command=window.destroy, fg="#edf2f4", bg="#3a86ff",
                        width=20, height=3, activebackground="#d90429", font=('times', 15, ' bold '))
 quitWindow.place(x=1250, y=500)
+
+disp_att = tk.Button(window, text="Display Attendance sheet ",command=display_attendance, fg="#edf2f4",
+                     bg="#3a86ff", width=20, height=3, activebackground="#d90429", font=('times', 15, ' bold '))
+disp_att.place(x=50, y=650)
+
+disp_def = tk.Button(window, text="Display Defaulters sheet ",command=display_def, fg="#edf2f4",
+                     bg="#3a86ff", width=20, height=3, activebackground="#d90429", font=('times', 15, ' bold '))
+disp_def.place(x=1250, y=650)
 
 
 window.mainloop()
